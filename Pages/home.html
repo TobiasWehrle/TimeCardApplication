@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://kendo.cdn.telerik.com/2020.3.1021/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2020.3.1021/styles/kendo.default.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="./../site.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2018.1.221/js/kendo.all.min.js"></script>
+    <script type="text/javascript" src='./../home.js'></script>
+    <script>
+        var resource = JSON.parse('##{}##');
+    </script>
+    <!-- TODO: replaceResource verwenden -->
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr data-uid="#: uid #">
+            <td>
+                #if(State === 'Kommen' || State === 'Come'){#
+                <span class="k-icon k-i-undo colored-green"></span> #}else{#
+                <span class="k-icon k-i-redo colored-red"></span> #}#
+            </td>
+            <td>
+                #: Time #
+            </td>
+            <td>
+                #: State #
+            </td>
+        </tr>
+    </script>
+</head>
+
+<body>
+    <div>
+        <ul id="menu">
+        </ul>
+    </div>
+    <table id="table">
+        <tr>
+            <td class="overview-Label-Border" id="AccOverviewTableDiv">{{AccOverview}}</td>
+            <td class="booking-Label-Border" id="BookingTableDiv">{{Booking}}</td>
+        </tr>
+        <tr class="overview-Border">
+            <td class="FlexitimeCreditTableDivStyle" id="FlexitimeCreditTableDiv">{{FlexiTimeCredit}}:</td>
+            <td class="FlexitimeCreditValueTableDivStyle" id="FlexitimeCreditValueTableDiv">10:00 {{Hours}}</td>
+        </tr>
+        <tr>
+            <td class="LeaveCreditTableDivStyle" id="LeaveCreditTableDiv">{{LeaveCredit}}:</td>
+            <td class="LeaveCreditValueTableDivStyle" id="LeaveCreditValueTableDiv">10.00 {{Days}}</td>
+        </tr>
+        <tr>
+            <td class="ApplyForLeaveTableDivStyle" id="ApplyForLeaveTableDiv">{{ApplyForLeave}}</td>
+        </tr>
+        <tr class="booking-Border">
+            <td class="ComeGoTableDivStyle" id="ComeGoTableDiv">{{Come}}</td>
+            <td class="ClockTableDivStyle" id="ClockTableDiv">10:00 Uhr</td>
+        </tr>
+        <tr>
+            <td class="CompleteTimeTodayTableDivStyle" id="CompleteTimeTodayTableDiv">{{CompleteTimeToday}}:</td>
+            <td class="CompleteTimeTodayValueTableDivStyle" id="CompleteTimeTodayValueTableDiv">08:00 {{Hours}}</td>
+        </tr>
+        <tr class="bookingStates-Border">
+            <td id="LogOfToday"></td>
+        </tr>
+    </table>
+</body>
+
+</html>

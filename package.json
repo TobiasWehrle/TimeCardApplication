@@ -1,0 +1,25 @@
+{
+    "name": "timecardanwendung",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "tw",
+    "license": "ISC",
+    "dependencies": {
+        "config": "^3.3.2",
+        "date-fns": "^2.16.1",
+        "express": "^4.17.1",
+        "express-session": "^1.17.1",
+        "glob": "^7.1.6",
+        "joi": "^17.2.1",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.10.9",
+        "nodemon": "^2.0.6",
+        "path": "^0.12.7",
+        "sessionstorage": "^0.1.0",
+        "winston": "^3.3.3"
+    }
+}

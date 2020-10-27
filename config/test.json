@@ -1,0 +1,3 @@
+{
+    "db": "mongodb://localhost/TimeCard_tests"
+}
