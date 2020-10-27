@@ -36,4 +36,21 @@ router.get('/:username', auth, async(req, res) => {
     }
 });
 
+router.get('/getLast/:username', auth, async(req, res) => {
+    try {
+        let currentDate = new Date(Date.now());
+        let dateTimeMin = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0, 1);
+        let dateTimeMax = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59, 59, 0);
+
+        if (!isValid(dateTimeMin) || !isValid(dateTimeMax)) {
+            return res.status(400).send("invalid date");
+        }
+
+        const dailyTimes = await DailyTimes.findOne({ username: req.params.username, dateTime: { $gt: dateTimeMin, $lt: dateTimeMax } }).sort({ dateTime: -1 });
+        return res.status(200).send(dailyTimes);
+    } catch (err) {
+        return res.status(400).send(err.message);
+    }
+});
+
 module.exports = router;
