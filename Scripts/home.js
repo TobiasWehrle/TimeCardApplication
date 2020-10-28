@@ -1,13 +1,18 @@
 $(document).ready(function() {
     createComeGoButton();
-    refreshTime()
+    refreshClock();
     createTimesOfToday();
     createApplyForLeave();
     createMenu();
-    setInterval(refreshTime, 1000);
+    setFlexitimeAndLeaveCredit();
+    setCompleteTimeToday();
+    setInterval(function() {
+        refreshClock();
+        setCompleteTimeToday();
+    }, 10000);
 });
 
-function refreshTime() {
+function refreshClock() {
     document.getElementById("ClockTableDiv").innerHTML = `${new Date().getHours().toString().padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`;
 }
 
@@ -26,20 +31,21 @@ function createComeGoButton() {
                 type: "POST",
             }).done(function(response) {
                 createTimesOfToday();
+                setCompleteTimeToday();
                 if (button.innerText === replaceResource("{{Come}}")) {
                     button.innerText = replaceResource("{{Go}}");
                 } else {
                     button.innerText = replaceResource("{{Come}}");
                 }
             }).fail(function() {
-
+                alert("Fehler beim schreiben der Zeiten in die Datenbank!");
             })
         }
     }).data("kendoButton").element[0].innerText = replaceResource("{{Come}}");
 
     const decoded = jwtDecode(sessionStorage.getItem("jwt"));
     $.ajax({
-        url: `http://localhost:8080/api/times/getLast/${decoded.payload.username}`,
+        url: `http://localhost:8080/api/times/getLastTime/${decoded.payload.username}`,
         contentType: "application/json",
         headers: {
             'X-Auth-Token': sessionStorage.getItem("jwt")
@@ -53,9 +59,79 @@ function createComeGoButton() {
             $("#ComeGoTableDiv").data("kendoButton").element[0].innerText = replaceResource("{{Come}}")
         }
     }).fail(function() {
-
+        alert("Fehler beim setzen des Textes des Knopfes!");
     })
 
+}
+
+function setFlexitimeAndLeaveCredit() {
+    $.ajax({
+        url: "http://localhost:8080/api/employee/getEmployee",
+        headers: {
+            'X-Auth-Token': sessionStorage.getItem("jwt")
+        },
+        contentType: "application/json",
+        type: "GET",
+        async: false
+    }).done(function(response) {
+        document.getElementById("FlexitimeCreditValueTableDiv").innerText = response.flexiTimeCredit.toString().padStart(2, "0") + " " + replaceResource("{{Hours}}");
+        document.getElementById("LeaveCreditValueTableDiv").innerText = response.leaveCredit.toString().padStart(2, "0") + " " + replaceResource("{{Days}}");;
+    }).fail(function() {
+        alert("Fehler beim Holen des Mitarbeiters!");
+    });
+}
+
+function setCompleteTimeToday() {
+    let times = getDailyTimes();
+    let zero = 0;
+    if (times.length === 0 || times[0].state === "Go") {
+        document.getElementById("CompleteTimeTodayValueTableDiv").innerHTML = zero.toString().padStart(2, "0") + ":" + zero.toString().padStart(2, "0") + " " + replaceResource("{{Hours}}");
+        return;
+    }
+
+    let resultMinutes = 0;
+    let counterCome = 0;
+    let counterGo = 0;
+    let lastComeMinutes = 0;
+
+    for (let time of times) {
+
+        if (counterCome > 1 || counterGo > 1) {
+            document.getElementById("CompleteTimeTodayValueTableDiv").innerHTML = zero.toString().padStart(2, "0") + ":" + zero.toString().padStart(2, "0") + " " + replaceResource("{{Hours}}");
+            return;
+        }
+
+        if (times[times.length - 1] === time && time.state === "Come") {
+            document.getElementById("CompleteTimeTodayValueTableDiv").innerHTML = timeConvert(resultMinutes);
+            return;
+        }
+
+        if (time.state === "Come") {
+            counterCome++;
+            counterGo = 0;
+
+            let dateCome = new Date(time.dateTime);
+            lastComeMinutes = dateCome.getHours() * 60 + dateCome.getMinutes();
+        }
+
+        if (time.state === "Go") {
+            counterGo++;
+            counterCome = 0;
+
+            let dateGo = new Date(time.dateTime);
+            let lastGoMinutes = dateGo.getHours() * 60 + dateGo.getMinutes();
+            resultMinutes += lastGoMinutes - lastComeMinutes;
+        }
+    }
+    document.getElementById("CompleteTimeTodayValueTableDiv").innerHTML = timeConvert(resultMinutes);
+}
+
+function timeConvert(number) {
+    var hours = (number / 60);
+    var resultHours = Math.floor(hours);
+    var minutes = (hours - resultHours) * 60;
+    var resultMinutes = Math.round(minutes);
+    return resultHours.toString().padStart(2, "0") + ":" + resultMinutes.toString().padStart(2, "0") + " " + replaceResource("{{Hours}}");
 }
 
 function createApplyForLeave() {
@@ -101,7 +177,7 @@ function createTimesOfToday() {
 
 function getDailyTimes() {
     try {
-        let result;
+        let result = new Array;
         const decoded = jwtDecode(sessionStorage.getItem("jwt"));
         $.ajax({
             url: `http://localhost:8080/api/times/${decoded.payload.username.toString()}`,
@@ -117,24 +193,8 @@ function getDailyTimes() {
         });
         return result;
     } catch (err) {
-        return err.message;
+        alert("Fehler beim Holen der täglichen Zeiten!");
     }
-}
-
-function replaceResource(data_string) {
-    for (let key of Object.keys(resource)) {
-        let pattern = new RegExp("{{" + key + "}}", "g");
-        data_string = data_string.replace(pattern, resource[key]);
-    }
-    return data_string;
-}
-
-function jwtDecode(t) {
-    let token = {};
-    token.raw = t;
-    token.header = JSON.parse(window.atob(t.split('.')[0]));
-    token.payload = JSON.parse(window.atob(t.split('.')[1]));
-    return (token)
 }
 
 function getMenuItems() {
@@ -150,7 +210,7 @@ function getMenuItems() {
     }).done(function(response) {
         menuItem = getMenu(response.isAdmin);
     }).fail(function() {
-        location.replace(`http://localhost:8080/Login/${replaceResource("{{ActiveLanguage}}")}`);
+        alert("Fehler beim Holen des Mitarbeiters!");
     });
     return menuItem;
 }

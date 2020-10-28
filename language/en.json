@@ -30,5 +30,6 @@
     "ChangePassword": "Change Password",
     "ManageVacation": "Manage Vacation",
     "ManageEmployeesAndDepartments": "Manage Employees And Departments",
-    "Clock": "am"
+    "Clock": "am",
+    "usernameOrPasswordEmpty": "Username or password are empty!"
 }

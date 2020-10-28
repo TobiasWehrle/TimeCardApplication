@@ -30,5 +30,6 @@
     "ChangePassword": "Passwort ändern",
     "ManageVacation": "Urlaub verwalten",
     "ManageEmployeesAndDepartments": "Mitarbeiter und Abteilungen verwalten",
-    "Clock": "Uhr"
+    "Clock": "Uhr",
+    "usernameOrPasswordEmpty": "Benutzername oder Passwort ist leer!"
 }

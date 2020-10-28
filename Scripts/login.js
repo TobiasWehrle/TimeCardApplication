@@ -19,6 +19,13 @@ $(document).ready(function() {
         click: function(e) {
             let username = $('#usernameTextbox').data('kendoTextBox').value();
             let password = $('#passwordTextbox').data('kendoTextBox').value();
+
+            console.log(username);
+            if (isEmpty(username) || isEmpty(password)) {
+                alert(replaceResource("{{usernameOrPasswordEmpty}}"));
+                return;
+            }
+
             $.ajax({
                 url: "http://localhost:8080/api/employee/validateLogin",
                 contentType: "application/json",
@@ -28,6 +35,7 @@ $(document).ready(function() {
                 sessionStorage.setItem("jwt", response);
                 location.replace(`http://localhost:8080/Home/${replaceResource("{{ActiveLanguage}}")}`);
             }).fail(function() {
+                alert("Fehler beim Login!");
                 location.replace(`http://localhost:8080/Login/${replaceResource("{{ActiveLanguage}}")}`);
             })
         }
@@ -44,6 +52,8 @@ $(document).ready(function() {
                 location.replace("http://localhost:8080/Login/de");
             } else if (itemText === replaceResource("{{Help}}")) {
                 location.replace("https://ips-apps.ip-systeme.de/timecard/pcterminal");
+            } else {
+                return;
             }
         }
     }).data("kendoMenu").append([{
@@ -58,11 +68,3 @@ $(document).ready(function() {
         }
     ]);
 });
-
-function replaceResource(data_string) {
-    for (var key of Object.keys(resource)) {
-        let pattern = new RegExp("{{" + key + "}}", "g");
-        data_string = data_string.replace(pattern, resource[key]);
-    }
-    return data_string;
-}
