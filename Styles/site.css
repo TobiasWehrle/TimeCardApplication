@@ -139,9 +139,10 @@ p .k-button {
 }
 
 .overview-Label-Border {
-    top: 15%;
+    top: 660%;
     position: absolute;
-    left: 18%;
+    left: 37.2%;
+    min-width: 500px;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -156,26 +157,47 @@ p .k-button {
     text-align: center;
     width: 400px;
     height: 350px;
-    left: 18%;
-    top: 230px;
+    min-width: 500px;
+    left: 37.2%;
+    top: 965%;
     position: absolute;
 }
 
 .booking-Label-Border {
-    top: 15%;
+    top: 560%;
     position: absolute;
-    right: 12%;
+    right: -81.3%;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
+    min-width: 600px;
     width: 600px;
     text-align: center;
 }
 
+.column {
+    float: left;
+    position: relative;
+    width: 47.5%;
+    padding: 10px;
+}
+
+.placeholder {
+    float: left;
+    width: 5%;
+    padding: 10px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 .booking-Border {
-    top: 230px;
+    top: 864%;
     position: absolute;
-    right: 12%;
+    right: -81.3%;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -185,9 +207,9 @@ p .k-button {
 }
 
 .bookingStates-Border {
-    top: 523px;
+    top: 2330%;
     position: absolute;
-    right: 12%;
+    right: -81.3%;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -243,32 +265,32 @@ p .k-button {
     height: 50px;
 }
 
-.ComeGoTableDivStyle {
+.ComeGoButtonStyle {
     font-size: xx-large;
-    top: 25%;
-    position: fixed;
-    right: 15%;
+    top: 10%;
+    position: absolute;
+    right: 5%;
     width: 350px;
     height: 125px;
 }
 
 .ClockTableDivStyle {
-    top: 30%;
-    position: fixed;
-    right: 37%;
-    font-size: x-large;
+    top: 27%;
+    position: absolute;
+    right: 75%;
+    font-size: xx-large;
 }
 
 .CompleteTimeTodayTableDivStyle {
-    top: 40%;
-    position: fixed;
-    right: 27%;
+    top: 75%;
+    position: absolute;
+    right: 30%;
 }
 
 .CompleteTimeTodayValueTableDivStyle {
-    top: 40%;
-    position: fixed;
-    right: 15%;
+    top: 75%;
+    position: absolute;
+    right: 5%;
 }
 
 

@@ -1,15 +1,15 @@
 $(document).ready(function() {
     createComeGoButton();
-    refreshClock();
     createTimesOfToday();
     createApplyForLeave();
     createMenu();
     setFlexitimeAndLeaveCredit();
+    refreshClock();
     setCompleteTimeToday();
     setInterval(function() {
         refreshClock();
         setCompleteTimeToday();
-    }, 10000);
+    }, 30000);
 });
 
 function refreshClock() {
@@ -17,10 +17,11 @@ function refreshClock() {
 }
 
 function createComeGoButton() {
-    $('#ComeGoTableDiv').kendoButton({
+    $('#ComeGoButton').kendoButton({
         click: function(e) {
-            let button = $("#ComeGoTableDiv").data("kendoButton").element[0];
+            let button = $("#ComeGoButton").data("kendoButton").element[0];
             let state = button.innerText === "Come" || button.innerText === "Kommen" ? "Come" : "Go";
+            refreshClock();
             $.ajax({
                 url: "http://localhost:8080/api/times/writeTimes",
                 contentType: "application/json",
@@ -54,9 +55,9 @@ function createComeGoButton() {
         type: "GET",
     }).done(function(response) {
         if (response.state === "Come" || response.state === "Kommen") {
-            $("#ComeGoTableDiv").data("kendoButton").element[0].innerText = replaceResource("{{Go}}")
+            $("#ComeGoButton").data("kendoButton").element[0].innerText = replaceResource("{{Go}}")
         } else {
-            $("#ComeGoTableDiv").data("kendoButton").element[0].innerText = replaceResource("{{Come}}")
+            $("#ComeGoButton").data("kendoButton").element[0].innerText = replaceResource("{{Come}}")
         }
     }).fail(function() {
         alert("Fehler beim setzen des Textes des Knopfes!");
@@ -188,8 +189,6 @@ function getDailyTimes() {
             async: false
         }).done(function(response) {
             result = response;
-        }).fail(function() {
-            location.replace(`http://localhost:8080/Home/${replaceResource("{{ActiveLanguage}}")}`);
         });
         return result;
     } catch (err) {

@@ -2,6 +2,7 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const { min } = require('date-fns');
 
 const employeeSchema = new mongoose.Schema({
     name: {
@@ -14,10 +15,12 @@ const employeeSchema = new mongoose.Schema({
         type: Number
     },
     username: {
-        type: String
+        type: String,
+        minlength: 5
     },
     password: {
-        type: String
+        type: String,
+        minlength: 5
     },
     department: {
         type: String
@@ -55,8 +58,8 @@ function validateEmployee(employee) {
         abbreviation: Joi.string(),
         employeeNumber: Joi.number(),
         role: Joi.string(),
-        username: Joi.string(),
-        password: Joi.string(),
+        username: Joi.string().min(5),
+        password: Joi.string().min(5),
         department: Joi.string(),
         eMail: Joi.string(),
         phoneNumber: Joi.string(),
