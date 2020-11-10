@@ -142,7 +142,6 @@ p .k-button {
     top: 660%;
     position: absolute;
     left: 37.2%;
-    min-width: 500px;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -157,7 +156,6 @@ p .k-button {
     text-align: center;
     width: 400px;
     height: 350px;
-    min-width: 500px;
     left: 37.2%;
     top: 965%;
     position: absolute;
@@ -166,7 +164,7 @@ p .k-button {
 .booking-Label-Border {
     top: 560%;
     position: absolute;
-    right: -81.3%;
+    left: 112%;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -197,7 +195,7 @@ p .k-button {
 .booking-Border {
     top: 864%;
     position: absolute;
-    right: -81.3%;
+    left: 112%;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -209,7 +207,7 @@ p .k-button {
 .bookingStates-Border {
     top: 2330%;
     position: absolute;
-    right: -81.3%;
+    left: 112%;
     border-style: solid;
     border: 3px solid black;
     padding: 20px;
@@ -234,33 +232,33 @@ p .k-button {
 }
 
 .FlexitimeCreditTableDivStyle {
-    top: 28%;
-    position: fixed;
-    left: 20%;
+    top: 21%;
+    position: absolute;
+    left: 6%;
 }
 
 .FlexitimeCreditValueTableDivStyle {
-    top: 28%;
-    position: fixed;
-    left: 30%;
+    top: 21%;
+    position: absolute;
+    left: 42%;
 }
 
 .LeaveCreditTableDivStyle {
-    top: 35%;
-    position: fixed;
-    left: 20%;
+    top: 42%;
+    position: absolute;
+    left: 6%;
 }
 
 .LeaveCreditValueTableDivStyle {
-    top: 35%;
-    position: fixed;
-    left: 30%;
+    top: 42%;
+    position: absolute;
+    left: 42%;
 }
 
 .ApplyForLeaveTableDivStyle {
-    top: 48%;
-    position: fixed;
-    left: 20%;
+    top: 80%;
+    position: absolute;
+    left: 5%;
     width: 200px;
     height: 50px;
 }

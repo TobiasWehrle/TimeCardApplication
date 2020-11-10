@@ -31,5 +31,11 @@
     "ManageVacation": "Manage Vacation",
     "ManageEmployeesAndDepartments": "Manage Employees And Departments",
     "Clock": "am",
-    "usernameOrPasswordEmpty": "Username or password are empty!"
+    "usernameOrPasswordEmpty": "Username or password are empty!",
+    "Cancel": "Cancel",
+    "Send": "Send",
+    "applicant": "Applicant",
+    "approver": "Approver",
+    "from": "from",
+    "to": "to"
 }

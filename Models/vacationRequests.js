@@ -17,7 +17,7 @@ const VacationRequests = mongoose.model('vacationRequests', new mongoose.Schema(
     createDate: {
         type: Date
     }
-}));
+}), "VacationRequests");
 
 function validateVacationRequests(vacationRequests) {
     const schema = Joi.object({
@@ -31,5 +31,5 @@ function validateVacationRequests(vacationRequests) {
     return Joi.assert(vacationRequests, schema);
 }
 
-exports.VacationRequests = vacationRequests;
+exports.VacationRequests = VacationRequests;
 exports.validate = validateVacationRequests;

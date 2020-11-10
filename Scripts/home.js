@@ -138,7 +138,7 @@ function timeConvert(number) {
 function createApplyForLeave() {
     $('#ApplyForLeaveTableDiv').kendoButton({
         click: function(e) {
-
+            createHolidayPopup();
         }
     });
 }
@@ -156,6 +156,7 @@ function createTimesOfToday() {
     $("#TimesOfToday").kendoGrid({
         height: 480,
         scrollable: true,
+        dataBound: toggleScrollbar,
         rowTemplate: kendo.template($("#rowTemplate").html()),
         dataSource: {
             data: entrys,
@@ -175,6 +176,21 @@ function createTimesOfToday() {
         },
     });
 }
+
+function toggleScrollbar() {
+    var gridHeight = $("#TimesOfToday").outerHeight();
+    var gridHeaderHeight = $("#TimesOfToday table:eq(0)").outerHeight();
+    var gridBodyHeight = $("#TimesOfToday table:eq(1)").outerHeight();
+    if (gridHeight < gridHeaderHeight + gridBodyHeight) { // show the scrollbar
+        $("#TimesOfToday .k-grid-header").css('padding', '');
+        $("#TimesOfToday .k-grid-header").css('padding-right', '17px');
+        $("#TimesOfToday .k-grid-content").css('overflow-y', 'auto');
+    } else { // hide the scrollbar
+        $("#TimesOfToday .k-grid-header").css('padding', '0 !important');
+        $("#TimesOfToday .k-grid-content").css('overflow-y', 'auto');
+    }
+}
+
 
 function getDailyTimes() {
     try {
@@ -294,4 +310,107 @@ function getMenu(isAdmin) {
             }
         ];
     }
+}
+
+function createHolidayPopup() {
+    var popupHtml =
+        '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
+        '<table>' +
+        '<tr>' +
+        '<input style="left: 10%;" id="applicant" />' +
+        '<input style="left: 25%;" placeholder="' + replaceResource("{{from}}") + '" id="from" />' +
+        '</tr>' +
+        '</br>' +
+        '<tr>' +
+        '<input style="left: 10%;" id="approver" />' +
+        '<input style="left: 25%;" placeholder="' + replaceResource("{{to}}") + '" id="to" />' +
+        '</tr>' +
+        '</table>' +
+        '<div class="k-edit-buttons k-state-default">' +
+        '<button class="k-dialog-send k-button k-primary">' + replaceResource("{{Send}}") + '</button>' +
+        '<button class="k-dialog-close k-button">' + replaceResource("{{Cancel}}") + '</button>' +
+        '</div>' +
+        '</div>';
+
+    var popupWindow = $(popupHtml).appendTo(document.body)
+        .kendoWindow({
+            modal: true,
+            width: 600,
+            resizable: false,
+            title: replaceResource("{{ApplyForLeave}}"),
+            visible: false,
+            deactivate: function(e) { e.sender.destroy(); }
+        }).data("kendoWindow")
+        .center().open();
+
+    popupWindow.element.find(".k-dialog-send").click(function() {
+        var approver = $("#approver").data("kendoDropDownList").value();
+        let applicant = $('#applicant').data('kendoTextBox').value();
+        let to = $('#to').data('kendoDatePicker').value();
+        let from = $('#from').data('kendoDatePicker').value();
+
+        if (isEmpty(approver) || isEmpty(applicant) || isEmpty(to) || isEmpty(from)) {
+            return alert("Fehler beim stellen eines Urlaubantrags");
+        }
+
+        $.ajax({
+            url: "http://localhost:8080/api/vacation/writeVacationRequest",
+            headers: {
+                'X-Auth-Token': sessionStorage.getItem("jwt")
+            },
+            contentType: "application/json",
+            data: { approver: approver, applicant: applicant, startOfVacation: from, endOfVacation: to },
+            type: "POST",
+            async: false
+        }).done(function(response) {
+            popupWindow.close();
+        }).fail(function() {
+            return alert("Fehler beim stellen eines Urlaubantrags");
+        });
+    });
+
+    popupWindow.element.find(".k-dialog-close").click(function() {
+        popupWindow.close();
+    });
+
+    $("#from").kendoDatePicker();
+    var datepickerFrom = $("#from").data("kendoDatePicker");
+    datepickerFrom.readonly(true);
+    $("#from").click(function() {
+        datepickerFrom.open();
+    });
+
+    $("#to").kendoDatePicker();
+    var datepickerTo = $("#to").data("kendoDatePicker");
+    datepickerTo.readonly(true);
+    $("#to").click(function() {
+        datepickerTo.open();
+    });
+
+    $('#applicant').kendoTextBox({
+        value: jwtDecode(sessionStorage.getItem("jwt")).payload.username,
+        readonly: true,
+    });
+
+    let admins = [];
+    $.ajax({
+        url: "http://localhost:8080/api/vacation/getAdmins",
+        headers: {
+            'X-Auth-Token': sessionStorage.getItem("jwt")
+        },
+        contentType: "application/json",
+        type: "GET",
+        async: false
+    }).done(function(response) {
+        admins = response;
+    }).fail(function() {
+        return alert("Fehler beim holen der Admins");
+    });
+
+    $("#approver").kendoDropDownList({
+        dataSource: admins
+    });
+
+    var dropdownlist = $("#approver").data("kendoDropDownList");
+    dropdownlist.text("");
 }

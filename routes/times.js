@@ -36,8 +36,6 @@ router.get('/:username', auth, async(req, res) => {
         }
 
         const dailyTimes = await DailyTimes.find({ username: req.params.username, dateTime: { $gt: dateTimeMin, $lt: dateTimeMax } }).sort("asc");
-        if (isEmpty(dailyTimes)) return res.status(400).send("no time found");
-
         return res.status(200).send(dailyTimes);
     } catch (err) {
         return res.status(400).send(err.message);
@@ -55,8 +53,6 @@ router.get('/getLastTime/:username', auth, async(req, res) => {
         }
 
         const dailyTimes = await DailyTimes.findOne({ username: req.params.username, dateTime: { $gt: dateTimeMin, $lt: dateTimeMax } }).sort({ dateTime: -1 });
-        if (isEmpty(dailyTimes)) return res.status(400).send("no time found");
-
         return res.status(200).send(dailyTimes);
     } catch (err) {
         return res.status(400).send(err.message);

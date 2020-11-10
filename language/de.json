@@ -31,5 +31,11 @@
     "ManageVacation": "Urlaub verwalten",
     "ManageEmployeesAndDepartments": "Mitarbeiter und Abteilungen verwalten",
     "Clock": "Uhr",
-    "usernameOrPasswordEmpty": "Benutzername oder Passwort ist leer!"
+    "usernameOrPasswordEmpty": "Benutzername oder Passwort ist leer!",
+    "Cancel": "Abbrechen",
+    "Send": "Anfrage absenden",
+    "applicant": "Antragsteller",
+    "approver": "Genehmiger",
+    "from": "von",
+    "to": "bis"
 }
