@@ -66,6 +66,7 @@ function validateEmployee(employee) {
         leaveCredit: Joi.string(),
         flexiTimeCredit: Joi.string(),
         targetTime: Joi.number(),
+        isAdmin: Joi.boolean(),
     });
 
     return Joi.assert(employee, schema);

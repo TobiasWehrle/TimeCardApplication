@@ -13,10 +13,10 @@ router.post('/writeVacationRequest', auth, async(req, res) => {
     try {
         validate(req.body);
         const decoded = jwt.verify(req.header("x-auth-token"), config.get('jwtPrivateKey'));
-        if (decoded === null) return res.status(400).send("unable to decode jsonWebToken");
+        if (isEmpty(decoded)) return res.status(400).send("unable to decode jsonWebToken");
 
-        const vacationRequest = await VacationRequests.create({ applicant: req.body.applicant, approver: req.body.approver, startOfVacation: req.body.startOfVacatio, endOfVacation: req.body.vacationRequest, createDate: formatISO(Date.now()) });
-        if (vacationRequest === null) return res.status(400).send("unable to insert time");
+        const vacationRequest = await VacationRequests.create({ applicant: req.body.applicant, approver: req.body.approver, startOfVacation: req.body.startOfVacation, endOfVacation: req.body.endOfVacation, createDate: formatISO(Date.now()) });
+        if (isEmpty(vacationRequest)) return res.status(400).send("unable to insert time");
 
         return res.status(200).send(vacationRequest);
     } catch (err) {
@@ -24,6 +24,8 @@ router.post('/writeVacationRequest', auth, async(req, res) => {
     }
 });
 
-
+function isEmpty(value) {
+    return (value == null || value.length === 0);
+}
 
 module.exports = router;

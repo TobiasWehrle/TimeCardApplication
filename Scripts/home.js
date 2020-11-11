@@ -245,6 +245,8 @@ function createMenu() {
                 location.replace(`http://localhost:8080/Login/${replaceResource("{{ActiveLanguage}}")}`);
             } else if (itemText === replaceResource("{{Help}}")) {
                 location.replace("https://ips-apps.ip-systeme.de/timecard/pcterminal");
+            } else if (itemText === replaceResource("{{UserInformation}}")) {
+                createUserInformationPopup();
             }
         }
     }).data("kendoMenu").append(menuItems);
@@ -317,13 +319,15 @@ function createHolidayPopup() {
         '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
         '<table>' +
         '<tr>' +
-        '<input style="left: 10%;" id="applicant" />' +
-        '<input style="left: 25%;" placeholder="' + replaceResource("{{from}}") + '" id="from" />' +
+        '<label style="left: 2%; position: relative;" for="applicant">' + replaceResource("{{applicant}}") + ':</label>' +
+        '<input style="left: 5%;" id="applicant" />' +
+        '<input style="left: 20%;" placeholder="' + replaceResource("{{from}}") + '" id="from" />' +
         '</tr>' +
         '</br>' +
         '<tr>' +
-        '<input style="left: 10%;" id="approver" />' +
-        '<input style="left: 25%;" placeholder="' + replaceResource("{{to}}") + '" id="to" />' +
+        '<label style="left: 2%; position: relative;" for="approver">' + replaceResource("{{approver}}") + ':</label>' +
+        '<input style="left: 5%;" id="approver" />' +
+        '<input style="left: 20%;" placeholder="' + replaceResource("{{to}}") + '" id="to" />' +
         '</tr>' +
         '</table>' +
         '<div class="k-edit-buttons k-state-default">' +
@@ -335,7 +339,7 @@ function createHolidayPopup() {
     var popupWindow = $(popupHtml).appendTo(document.body)
         .kendoWindow({
             modal: true,
-            width: 600,
+            width: 700,
             resizable: false,
             title: replaceResource("{{ApplyForLeave}}"),
             visible: false,
@@ -359,7 +363,7 @@ function createHolidayPopup() {
                 'X-Auth-Token': sessionStorage.getItem("jwt")
             },
             contentType: "application/json",
-            data: { approver: approver, applicant: applicant, startOfVacation: from, endOfVacation: to },
+            data: JSON.stringify({ approver: approver, applicant: applicant, startOfVacation: from, endOfVacation: to }),
             type: "POST",
             async: false
         }).done(function(response) {
@@ -394,7 +398,7 @@ function createHolidayPopup() {
 
     let admins = [];
     $.ajax({
-        url: "http://localhost:8080/api/vacation/getAdmins",
+        url: "http://localhost:8080/api/employee/getAdmins",
         headers: {
             'X-Auth-Token': sessionStorage.getItem("jwt")
         },
@@ -402,7 +406,7 @@ function createHolidayPopup() {
         type: "GET",
         async: false
     }).done(function(response) {
-        admins = response;
+        response.forEach(x => admins.push(x.username));
     }).fail(function() {
         return alert("Fehler beim holen der Admins");
     });
@@ -413,4 +417,39 @@ function createHolidayPopup() {
 
     var dropdownlist = $("#approver").data("kendoDropDownList");
     dropdownlist.text("");
+}
+
+function createUserInformationPopup() {
+    var popupHtml =
+        '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
+        '<table>' +
+        '<tr>' +
+
+        '</tr>' +
+        '<tr>' +
+
+        '</tr>' +
+        '<tr>' +
+
+        '</tr>' +
+        '<tr>' +
+
+        '</tr>' +
+        '</table>' +
+        '</div>';
+
+    var popupWindow = $(popupHtml).appendTo(document.body)
+        .kendoWindow({
+            modal: true,
+            width: 700,
+            resizable: false,
+            title: replaceResource("{{UserInformation}}"),
+            visible: false,
+            deactivate: function(e) { e.sender.destroy(); }
+        }).data("kendoWindow")
+        .center().open();
+
+
+
+
 }

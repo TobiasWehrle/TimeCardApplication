@@ -14,10 +14,10 @@ router.post('/writeTimes', auth, async(req, res) => {
     try {
         validate(req.body);
         const decoded = jwt.verify(req.header("x-auth-token"), config.get('jwtPrivateKey'));
-        if (decoded === null) return res.status(400).send("unable to decode jsonWebToken");
+        if (isEmpty(decoded)) return res.status(400).send("unable to decode jsonWebToken");
 
         const dailyTime = await DailyTimes.create({ username: decoded.username, state: req.body.state, dateTime: formatISO(Date.now()) });
-        if (dailyTime === null) return res.status(400).send("unable to insert time");
+        if (isEmpty(dailyTime)) return res.status(400).send("unable to insert time");
 
         return res.status(200).send(dailyTime);
     } catch (err) {
