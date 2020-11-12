@@ -234,7 +234,6 @@ function createMenu() {
     let menuItems = getMenuItems();
     $('#menu').kendoMenu({
         select: function(e) {
-
             let itemText = $(e.item).children(".k-link").text().trim();
 
             if (itemText === replaceResource("{{English}}")) {
@@ -247,6 +246,8 @@ function createMenu() {
                 location.replace("https://ips-apps.ip-systeme.de/timecard/pcterminal");
             } else if (itemText === replaceResource("{{UserInformation}}")) {
                 createUserInformationPopup();
+            } else if (itemText === replaceResource("{{ChangePassword}}")) {
+                createChangePasswortPopup();
             }
         }
     }).data("kendoMenu").append(menuItems);
@@ -312,144 +313,4 @@ function getMenu(isAdmin) {
             }
         ];
     }
-}
-
-function createHolidayPopup() {
-    var popupHtml =
-        '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
-        '<table>' +
-        '<tr>' +
-        '<label style="left: 2%; position: relative;" for="applicant">' + replaceResource("{{applicant}}") + ':</label>' +
-        '<input style="left: 5%;" id="applicant" />' +
-        '<input style="left: 20%;" placeholder="' + replaceResource("{{from}}") + '" id="from" />' +
-        '</tr>' +
-        '</br>' +
-        '<tr>' +
-        '<label style="left: 2%; position: relative;" for="approver">' + replaceResource("{{approver}}") + ':</label>' +
-        '<input style="left: 5%;" id="approver" />' +
-        '<input style="left: 20%;" placeholder="' + replaceResource("{{to}}") + '" id="to" />' +
-        '</tr>' +
-        '</table>' +
-        '<div class="k-edit-buttons k-state-default">' +
-        '<button class="k-dialog-send k-button k-primary">' + replaceResource("{{Send}}") + '</button>' +
-        '<button class="k-dialog-close k-button">' + replaceResource("{{Cancel}}") + '</button>' +
-        '</div>' +
-        '</div>';
-
-    var popupWindow = $(popupHtml).appendTo(document.body)
-        .kendoWindow({
-            modal: true,
-            width: 700,
-            resizable: false,
-            title: replaceResource("{{ApplyForLeave}}"),
-            visible: false,
-            deactivate: function(e) { e.sender.destroy(); }
-        }).data("kendoWindow")
-        .center().open();
-
-    popupWindow.element.find(".k-dialog-send").click(function() {
-        var approver = $("#approver").data("kendoDropDownList").value();
-        let applicant = $('#applicant').data('kendoTextBox').value();
-        let to = $('#to').data('kendoDatePicker').value();
-        let from = $('#from').data('kendoDatePicker').value();
-
-        if (isEmpty(approver) || isEmpty(applicant) || isEmpty(to) || isEmpty(from)) {
-            return alert("Fehler beim stellen eines Urlaubantrags");
-        }
-
-        $.ajax({
-            url: "http://localhost:8080/api/vacation/writeVacationRequest",
-            headers: {
-                'X-Auth-Token': sessionStorage.getItem("jwt")
-            },
-            contentType: "application/json",
-            data: JSON.stringify({ approver: approver, applicant: applicant, startOfVacation: from, endOfVacation: to }),
-            type: "POST",
-            async: false
-        }).done(function(response) {
-            popupWindow.close();
-        }).fail(function() {
-            return alert("Fehler beim stellen eines Urlaubantrags");
-        });
-    });
-
-    popupWindow.element.find(".k-dialog-close").click(function() {
-        popupWindow.close();
-    });
-
-    $("#from").kendoDatePicker();
-    var datepickerFrom = $("#from").data("kendoDatePicker");
-    datepickerFrom.readonly(true);
-    $("#from").click(function() {
-        datepickerFrom.open();
-    });
-
-    $("#to").kendoDatePicker();
-    var datepickerTo = $("#to").data("kendoDatePicker");
-    datepickerTo.readonly(true);
-    $("#to").click(function() {
-        datepickerTo.open();
-    });
-
-    $('#applicant').kendoTextBox({
-        value: jwtDecode(sessionStorage.getItem("jwt")).payload.username,
-        readonly: true,
-    });
-
-    let admins = [];
-    $.ajax({
-        url: "http://localhost:8080/api/employee/getAdmins",
-        headers: {
-            'X-Auth-Token': sessionStorage.getItem("jwt")
-        },
-        contentType: "application/json",
-        type: "GET",
-        async: false
-    }).done(function(response) {
-        response.forEach(x => admins.push(x.username));
-    }).fail(function() {
-        return alert("Fehler beim holen der Admins");
-    });
-
-    $("#approver").kendoDropDownList({
-        dataSource: admins
-    });
-
-    var dropdownlist = $("#approver").data("kendoDropDownList");
-    dropdownlist.text("");
-}
-
-function createUserInformationPopup() {
-    var popupHtml =
-        '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
-        '<table>' +
-        '<tr>' +
-
-        '</tr>' +
-        '<tr>' +
-
-        '</tr>' +
-        '<tr>' +
-
-        '</tr>' +
-        '<tr>' +
-
-        '</tr>' +
-        '</table>' +
-        '</div>';
-
-    var popupWindow = $(popupHtml).appendTo(document.body)
-        .kendoWindow({
-            modal: true,
-            width: 700,
-            resizable: false,
-            title: replaceResource("{{UserInformation}}"),
-            visible: false,
-            deactivate: function(e) { e.sender.destroy(); }
-        }).data("kendoWindow")
-        .center().open();
-
-
-
-
 }

@@ -20,7 +20,6 @@ $(document).ready(function() {
             let username = $('#usernameTextbox').data('kendoTextBox').value();
             let password = $('#passwordTextbox').data('kendoTextBox').value();
 
-            console.log(username);
             if (isEmpty(username) || isEmpty(password)) {
                 alert(replaceResource("{{usernameOrPasswordEmpty}}"));
                 return;

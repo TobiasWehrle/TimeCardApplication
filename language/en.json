@@ -1,5 +1,6 @@
 {
     "Employee": "Employee",
+    "Admin": "Admin",
     "Overview": "Overview",
     "Language": "Language",
     "ActiveLanguage": "en",
@@ -37,5 +38,13 @@
     "applicant": "Applicant",
     "approver": "Approver",
     "from": "from",
-    "to": "to"
+    "to": "to",
+    "NameAndAbbreviation": "Name and Abbreviation: ",
+    "Role": "Role: ",
+    "Employeenumber": "Employeenumber: ",
+    "Department": "Department: ",
+    "eMail": "E-Mail: ",
+    "Phonenumber": "Phonenumber: ",
+    "newPassword": "new Password",
+    "repeatNewPassword": "repeat new Password"
 }

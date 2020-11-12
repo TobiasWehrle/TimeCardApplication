@@ -46,7 +46,7 @@ const employeeSchema = new mongoose.Schema({
 });
 
 employeeSchema.methods.generateAuthToken = function() {
-    const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin, username: this.username }, config.get('jwtPrivateKey'));
+    const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin, username: this.username, password: this.password }, config.get('jwtPrivateKey'));
     return token;
 }
 

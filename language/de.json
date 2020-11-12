@@ -1,5 +1,6 @@
 {
     "Employee": "Mitarbeiter",
+    "Admin": "Admin",
     "Overview": "Übersicht",
     "Language": "Sprache",
     "ActiveLanguage": "de",
@@ -37,5 +38,13 @@
     "applicant": "Antragsteller",
     "approver": "Genehmiger",
     "from": "von",
-    "to": "bis"
+    "to": "bis",
+    "NameAndAbbreviation": "Name und Kürzel: ",
+    "Role": "Rolle: ",
+    "Employeenumber": "Mitarbeiternummer: ",
+    "Department": "Abteilung: ",
+    "eMail": "E-Mail: ",
+    "Phonenumber": "Telefon: ",
+    "newPassword": "neues Passwort",
+    "repeatNewPassword": "neues Passwort wiederholen"
 }

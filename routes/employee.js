@@ -21,6 +21,26 @@ router.post('/validateLogin', async(req, res) => {
     }
 });
 
+router.put('/changePassword', auth, async(req, res) => {
+    try {
+        validate(req.body);
+        if (isEmpty(req.body.username) || isEmpty(req.body.password)) return res.status(400).send("username or password are not filled");
+
+        const decoded = jwt.verify(req.header("x-auth-token"), config.get('jwtPrivateKey'));
+        if (isEmpty(decoded)) return res.status(400).send("unable to decode jsonWebToken");
+
+        await Employee.updateOne({ username: req.body.username }, { password: req.body.password });
+
+        const employee = await Employee.findOne({ username: req.body.username });
+        if (isEmpty(employee) || employee.password !== req.body.password) return res.status(400).send("username or password are invalid");
+
+        const token = employee.generateAuthToken();
+        return res.header('x-auth-token', token).status(200).send(token);
+    } catch (err) {
+        return res.status(400).send(err.message);
+    }
+});
+
 router.get('/getEmployee', auth, async(req, res) => {
     try {
         const decoded = jwt.verify(req.header("x-auth-token"), config.get('jwtPrivateKey'));
