@@ -44,7 +44,12 @@
     "Employeenumber": "Mitarbeiternummer: ",
     "Department": "Abteilung: ",
     "eMail": "E-Mail: ",
+    "VacationFor": "Urlaub für ",
+    "Title": "Titel",
+    "End": "Enddatum",
+    "Start": "Startdatum",
     "Phonenumber": "Telefon: ",
     "newPassword": "neues Passwort",
-    "repeatNewPassword": "neues Passwort wiederholen"
+    "repeatNewPassword": "neues Passwort wiederholen",
+    "EndDateValidation": "Enddatum muss größer oder gleich wie das Startdatum sein"
 }

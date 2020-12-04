@@ -1,3 +1,5 @@
+const { VacationRequests } = require("../models/vacationRequests");
+
 function createHolidayPopup() {
     var popupHtml =
         '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
@@ -228,5 +230,93 @@ function createChangePasswortPopup() {
                 alert("Fehler beim ändern des Passwortes!");
             })
         }
+    });
+}
+
+function createManageVacationPopup() {
+    let allEmployees = [];
+    $.ajax({
+        url: "http://localhost:8080/api/employee/getEmployees",
+        headers: {
+            'X-Auth-Token': sessionStorage.getItem("jwt")
+        },
+        type: "GET",
+    }).done(function(response) {
+        let i = 1;
+        response.forEach(employee => {
+            allEmployees.push({ text: employee.username, value: i, color: "#f58ac0" });
+            i++;
+        })
+    }).fail(function() {
+        alert("Fehler beim holen der Mitarbeiter!");
+    });
+
+    let allVacationRequests = [];
+    $.ajax({
+        url: "http://localhost:8080/api/employee/getEmployees",
+        headers: {
+            'X-Auth-Token': sessionStorage.getItem("jwt")
+        },
+        type: "GET",
+    }).done(function(response) {
+        response.forEach(vacationRequest => {
+            allVacationRequests.push({ applicant: vacationRequest.applicant, createDate: vacationRequest.createDate });
+        })
+    }).fail(function() {
+        alert("Fehler beim holen der Mitarbeiter!");
+    });
+
+    var popupHtml =
+        '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto;">' +
+        '<div style="margin-left: 4%;" id="grid" />' +
+        '<div style="margin-left: 4%;" id="scheduler" />' +
+        '</div>';
+
+    $(popupHtml).appendTo(document.body)
+        .kendoWindow({
+            modal: true,
+            width: 1500,
+            height: 900,
+            resizable: false,
+            title: replaceResource("{{ManageVacation}}"),
+            visible: false,
+            deactivate: function(e) { e.sender.destroy(); }
+        }).data("kendoWindow")
+        .center().open();
+
+    $("#grid").kendoGrid({
+        height: 639,
+        scrollable: true,
+        dataBound: toggleScrollbar("grid"),
+        rowTemplate: kendo.template($("#rowTemplateVacation").html()),
+        dataSource: {
+            data: entrys,
+            schema: {
+                model: {
+                    fields: {
+                        applicant: {
+                            type: "string"
+                        },
+                        createDate: {
+                            type: "string"
+                        }
+                    },
+                }
+            },
+        },
+    });
+
+    $("#scheduler").kendoScheduler({
+        date: new Date(Date.now()),
+        startTime: new Date(Date.now()),
+        height: 639,
+        width: 1200,
+        views: ["month"],
+        eventTemplate: $("#event-template").html(),
+        editable: {
+            template: $("#customEditorTemplate").html(),
+        },
+        save: saveNewVacation(),
+        dataSource: [],
     });
 }

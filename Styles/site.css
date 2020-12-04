@@ -332,3 +332,15 @@ p .k-button {
 .fontSizeXLarge {
     font-size: x-large;
 }
+
+.event-template img {
+    float: left;
+    margin: 0 8px;
+}
+
+body,
+h1,
+h2,
+h3 {
+    margin: 0px;
+}

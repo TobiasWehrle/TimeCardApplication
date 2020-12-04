@@ -156,7 +156,7 @@ function createTimesOfToday() {
     $("#TimesOfToday").kendoGrid({
         height: 480,
         scrollable: true,
-        dataBound: toggleScrollbar,
+        dataBound: toggleScrollbar("TimesOfToday"),
         rowTemplate: kendo.template($("#rowTemplate").html()),
         dataSource: {
             data: entrys,
@@ -177,17 +177,17 @@ function createTimesOfToday() {
     });
 }
 
-function toggleScrollbar() {
-    var gridHeight = $("#TimesOfToday").outerHeight();
-    var gridHeaderHeight = $("#TimesOfToday table:eq(0)").outerHeight();
-    var gridBodyHeight = $("#TimesOfToday table:eq(1)").outerHeight();
+function toggleScrollbar(name) {
+    var gridHeight = $(`#${name}`).outerHeight();
+    var gridHeaderHeight = $(`#${name} table:eq(0)`).outerHeight();
+    var gridBodyHeight = $(`#${name} table:eq(1)`).outerHeight();
     if (gridHeight < gridHeaderHeight + gridBodyHeight) { // show the scrollbar
-        $("#TimesOfToday .k-grid-header").css('padding', '');
-        $("#TimesOfToday .k-grid-header").css('padding-right', '17px');
-        $("#TimesOfToday .k-grid-content").css('overflow-y', 'auto');
+        $(`#${name} .k-grid-header`).css('padding', '');
+        $(`#${name} .k-grid-header`).css('padding-right', '17px');
+        $(`#${name} .k-grid-content`).css('overflow-y', 'auto');
     } else { // hide the scrollbar
-        $("#TimesOfToday .k-grid-header").css('padding', '0 !important');
-        $("#TimesOfToday .k-grid-content").css('overflow-y', 'auto');
+        $(`#${name} .k-grid-header`).css('padding', '0 !important');
+        $(`#${name} .k-grid-content`).css('overflow-y', 'auto');
     }
 }
 
@@ -248,6 +248,8 @@ function createMenu() {
                 createUserInformationPopup();
             } else if (itemText === replaceResource("{{ChangePassword}}")) {
                 createChangePasswortPopup();
+            } else if (itemText === replaceResource("{{ManageVacation}}")) {
+                createManageVacationPopup();
             }
         }
     }).data("kendoMenu").append(menuItems);
@@ -313,4 +315,8 @@ function getMenu(isAdmin) {
             }
         ];
     }
+}
+
+function saveNewVacation() {
+
 }

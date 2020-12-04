@@ -55,6 +55,20 @@ router.get('/getEmployee', auth, async(req, res) => {
     }
 });
 
+router.get('/getEmployees', auth, async(req, res) => {
+    try {
+        const decoded = jwt.verify(req.header("x-auth-token"), config.get('jwtPrivateKey'));
+        if (isEmpty(decoded)) return res.status(400).send("unable to decode jsonWebToken");
+
+        const employees = await Employee.find();
+        if (isEmpty(employees)) return res.status(400).send("no users found");
+
+        res.status(200).send(employees);
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+});
+
 router.get('/getAdmins', auth, async(req, res) => {
     try {
         const decoded = jwt.verify(req.header("x-auth-token"), config.get('jwtPrivateKey'));

@@ -30,6 +30,49 @@
             </td>
         </tr>
     </script>
+    <script id="rowTemplateVacation" type="text/x-kendo-tmpl">
+        <tr data-uid="#: uid #">
+            <td>
+                #: applicant #
+            </td>
+            <td>
+                #: createDate #
+            </td>
+        </tr>
+    </script>
+    <script id="event-template" type="text/x-kendo-template">
+        <div class="movie-template">
+            <p>
+                #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
+            </p>
+            <h3>#: title #</h3>
+        </div>
+    </script>
+    <script id="customEditorTemplate" type="text/x-kendo-template">
+        <div class="k-edit-label"><label for="title">#= replaceResource("{{Title}}") #</label></div>
+        <div data-container-for="title" class="k-edit-field">
+            <input type="text" class="k-textbox" name="title" required="required" data-bind="value:title">
+        </div>
+        <div class="k-edit-label">
+            <label for="start">#= replaceResource("{{Start}}") #</label>
+        </div>
+        <div data-container-for="start" class="k-edit-field">
+            <input type="text" data-type="date" data-role="datepicker" data-bind="value:start" name="start" />
+            <span data-bind="text: startTimezone"></span>
+            <span data-for="start" class="k-invalid-msg" style="display: none;"></span>
+        </div>
+        <div class="k-edit-label"><label for="end">#= replaceResource("{{End}}") #</label></div>
+        <div data-container-for="end" class="k-edit-field">
+            <input type="text" data-type="date" data-role="datepicker" data-bind="value:end" name="end" data-datecompare-msg="End date should be greater than or equal to the start date" />
+            <span data-bind="text: endTimezone"></span>
+            <span data-for="end" class="k-invalid-msg" style="display: none;"></span>
+        </div>
+        <div class="k-edit-label"><label for="employeeId">#= replaceResource("{{Employee}}") #</label></div>
+        <div data-container-for="employeeId" class="k-edit-field">
+            <select id="employeeId" data-bind="value:employeeId" data-role="dropdownlist" data-value-field="value" data-text-field="text">
+          </select>
+        </div>
+    </script>
 </head>
 
 <body>
