@@ -2,31 +2,30 @@ $(document).ready(function() {
 
     $('#usernameTextbox').kendoTextBox({
         placeholder: replaceResource("{{Username}}"),
-        label: {
-            content: replaceResource("{{Username}}"),
-            floating: true
-        }
     });
     $("#passwordTextbox").kendoTextBox({
         placeholder: replaceResource("{{Password}}"),
-        label: {
-            content: replaceResource("{{Password}}"),
-            floating: true
-        }
     });
 
     $("#loginButton").kendoButton({
         click: function(e) {
-            let username = $('#usernameTextbox').data('kendoTextBox').value();
-            let password = $('#passwordTextbox').data('kendoTextBox').value();
+            let username = $('#usernameTextbox').val();
+            let password = $('#passwordTextbox').val();
 
-            if (isEmpty(username) || isEmpty(password)) {
+            if (isEmpty(username)) {
                 alert(replaceResource("{{usernameOrPasswordEmpty}}"));
+                $('#usernameTextbox').focus();
+                return;
+            }
+
+            if (isEmpty(password)) {
+                alert(replaceResource("{{usernameOrPasswordEmpty}}"));
+                $('#passwordTextbox').focus();
                 return;
             }
 
             $.ajax({
-                url: "http://localhost:8080/api/employee/validateLogin",
+                url: "http://localhost:8080/api/login/validateLogin",
                 contentType: "application/json",
                 data: JSON.stringify({ username: username, password: password }),
                 type: "POST",
@@ -37,6 +36,13 @@ $(document).ready(function() {
                 alert("Fehler beim Login!");
                 location.replace(`http://localhost:8080/Login/${replaceResource("{{ActiveLanguage}}")}`);
             })
+        }
+    });
+
+    document.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("loginButton").click();
         }
     });
 

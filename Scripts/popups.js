@@ -158,13 +158,13 @@ function createChangePasswortPopup() {
         '<div class="k-editor-dialog k-popup-edit-form k-edit-form-container" style="width:auto; margin-left: 35%;">' +
         '<input style="position: relative; width: 200px;" id="username" />' +
         '</br>' +
-        '<input style="position: relative; width: 200px;" id="oldPassword" />' +
+        '<input style="position: relative; width: 200px;" placeholder="' + replaceResource("{{oldPassword}}") + '" id="oldPassword" type="password" />' +
         '</br>' +
         '<div style="position: relative; heigth: 50px;" id="placeholder" />' +
         '</br>' +
-        '<input style=" position: relative; width: 200px;" placeholder="' + replaceResource("{{newPassword}}") + '" id="newPassword" />' +
+        '<input style=" position: relative; width: 200px;" placeholder="' + replaceResource("{{newPassword}}") + '" id="newPassword" type="password" />' +
         '</br>' +
-        '<input style="position: relative; width: 200px;" placeholder="' + replaceResource("{{repeatNewPassword}}") + '" id="againNewPassword" />' +
+        '<input style="position: relative; width: 200px;" placeholder="' + replaceResource("{{repeatNewPassword}}") + '" id="againNewPassword" type="password" />' +
         '</br>' +
         '<div style="position: relative; heigth: 50px;" id="placeholder" />' +
         '</br>' +
@@ -189,11 +189,7 @@ function createChangePasswortPopup() {
         readonly: true,
     });
 
-    $('#oldPassword').kendoTextBox({
-        value: decoded.payload.password,
-        readonly: true,
-    });
-
+    $('#oldPassword').kendoTextBox();
     $('#newPassword').kendoTextBox();
     $('#againNewPassword').kendoTextBox();
     $('#newPasswordButton').kendoButton({
@@ -216,12 +212,12 @@ function createChangePasswortPopup() {
             }
 
             $.ajax({
-                url: "http://localhost:8080/api/employee/changePassword",
+                url: "http://localhost:8080/api/login/changePassword",
                 headers: {
                     'X-Auth-Token': sessionStorage.getItem("jwt")
                 },
                 contentType: "application/json",
-                data: JSON.stringify({ username: username, password: newPassword }),
+                data: JSON.stringify({ username: username, oldPassword: oldPassword, newPassword: newPassword }),
                 type: "PUT",
             }).done(function(response) {
                 sessionStorage.setItem("jwt", response);

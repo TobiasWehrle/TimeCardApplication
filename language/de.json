@@ -50,6 +50,7 @@
     "Start": "Startdatum",
     "Phonenumber": "Telefon: ",
     "newPassword": "neues Passwort",
+    "oldPassword": "altes Password",
     "repeatNewPassword": "neues Passwort wiederholen",
     "EndDateValidation": "Enddatum muss größer oder gleich wie das Startdatum sein"
 }

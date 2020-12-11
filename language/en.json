@@ -50,6 +50,7 @@
     "VacationFor": "Vacation for ",
     "Phonenumber": "Phonenumber: ",
     "newPassword": "new Password",
+    "oldPassword": "old Password",
     "repeatNewPassword": "repeat new Password",
     "EndDateValidation": "End date should be greater than or equal to the start date"
 }
